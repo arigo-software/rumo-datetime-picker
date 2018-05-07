@@ -1,0 +1,36 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="rumo-datetime-picker">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * `rumo-datetime-picker`
+     * rumo-datetime-picker is a Web Component providing a date and time selection field.
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class RumoDatetimePicker extends Polymer.Element {
+      static get is() { return 'rumo-datetime-picker'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'rumo-datetime-picker'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(RumoDatetimePicker.is, RumoDatetimePicker);
+  </script>
+</dom-module>
