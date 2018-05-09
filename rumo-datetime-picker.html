@@ -1,15 +1,49 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
+<link rel="import" href="../vaadin-ordered-layout/vaadin-vertical-layout.html">
+<link rel="import" href="../vaadin-date-picker/vaadin-date-picker.html">
+
+<script src="../sugar/dist/sugar.min.js"></script>
+<script src="../sugar/dist/locales/de.js"></script>
+
 <dom-module id="rumo-datetime-picker">
   <template>
     <style>
       :host {
         display: block;
       }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
-  </template>
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      h3 {
+        margin-top: 0;
+      }
+    </style>
+    <div class="container">
+      <vaadin-vertical-layout theme="padding">
+        <h3 class="block">
+          Anfang
+        </h3>
+        <div class="block">
+          <vaadin-date-picker
+            id="startDate"
+            value="{{startDate}}"></vaadin-date-picker>
+        </div>
+      </vaadin-vertical-layout>
+      <vaadin-vertical-layout theme="padding">
+        <h3 class="block">
+          Ende
+        </h3>
+        <div class="block">
+          <vaadin-date-picker
+            id="endDate"
+            value="{{endDate}}"></vaadin-date-picker>
+        </div>
+      </vaadin-vertical-layout>
+    </div>
+  </template>
   <script>
     /**
      * `rumo-datetime-picker`
@@ -23,9 +57,64 @@
       static get is() { return 'rumo-datetime-picker'; }
       static get properties() {
         return {
-          prop1: {
+          startDate: {
             type: String,
-            value: 'rumo-datetime-picker'
+            computed: '_computeStartDate()'
+          },
+          endDate: {
+            type: String,
+            computed: '_computeEndDate()'
+          }
+        };
+      }
+
+      constructor() {
+        super();
+
+        Sugar.extend();
+      }
+
+      ready() {
+        super.ready();
+
+        Sugar.Date.setLocale('de');
+        this._i18nCalendar(this.$.startDate);
+        this._i18nCalendar(this.$.endDate);
+      }
+
+      _computeStartDate() {
+        return this.startDate === undefined ? Sugar.Date.format(new Date().rewind('1 day', true), '%Y-%m-%d') : this.startDate;
+      }
+
+      _computeEndDate(bar) {
+        return this.endDate === undefined ? Sugar.Date.format(new Date(), '%Y-%m-%d') : this.endDate;
+      }
+
+      _i18nCalendar(calendar) {
+        calendar.i18n = {
+          week: 'Woche',
+          calendar: 'Kalender',
+          clear: 'Leeren',
+          today: 'Heute',
+          cancel: 'Abbrechen',
+          firstDayOfWeek: 1,
+          monthNames:
+          'Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember'.split('_'),
+          weekdays: 'Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag'.split('_'),
+          weekdaysShort: 'so_mo_di_mi_do_fr_sa'.split('_'),
+          formatDate: function(date) {
+            return Sugar.Date.format(Sugar.Date.create(date), '{short}');
+          },
+          formatTitle: function(monthName, fullYear) {
+            return monthName + ' ' + fullYear;
+          },
+          parseDate: function(dateString) {
+            const date = Sugar.Date.create(dateString);
+            return {
+              day: date.getDate(),
+              month: date.getMonth(),
+              year: date.getFullYear()
+            };
           }
         };
       }
