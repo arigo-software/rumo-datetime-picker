@@ -1,0 +1,55 @@
+{
+  "name": "arigo-datetime-picker",
+  "version": "0.0.1",
+  "description": "Simple date-time-picker based on vaadin-components",
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stefanfrede/arigo-datetimepicker.git"
+  },
+  "keywords": [
+    "Arigo",
+    "date-time-picker",
+    "datetime-picker",
+    "web-component",
+    "web-components",
+    "polymer"
+  ],
+  "author": "Stefan Frede <public@frede.biz>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/stefanfrede/arigo-datetimepicker/issues"
+  },
+  "homepage": "https://github.com/stefanfrede/arigo-datetimepicker#readme",
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "lint-staged": {
+    "src/**/*.html": [
+      "stylelint --fix",
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "precommit": "lint-staged",
+    "lint": "npm run lint:css && npm run lint:javascript && npm run lint:polymer",
+    "lint:css": "npx stylelint 'src/*.html'",
+    "lint:javascript": "npx eslint --ext .html,.js src",
+    "lint:polymer": "polymer lint",
+    "test": "polymer test"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-html": "^4.0.3",
+    "eslint-plugin-prettier": "^2.6.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.1.0",
+    "prettier": "^1.12.1",
+    "stylelint": "^9.2.0",
+    "stylelint-config-prettier": "^3.2.0",
+    "stylelint-config-recommended": "^2.1.0",
+    "stylelint-order": "^0.8.1"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "name": "rumo-datetime-picker",
   "description": "rumo-datetime-picker is a Web Component providing a date and time selection field.",
-  "main": "rumo-datetime-picker.html",
+  "main": "src/rumo-datetime-picker.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.0.0",
