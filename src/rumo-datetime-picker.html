@@ -66,21 +66,25 @@
       }
       static get properties() {
         return {
+          // startDate: {
+          //   type: String,
+          //   observer: '_startDateChanged',
+          // },
           startDate: {
             type: String,
-            observer: '_startDateChanged',
+            value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
           },
           endDate: {
             type: String,
-            observer: '_endDateChanged',
+            value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
           },
           startTime: {
             type: String,
-            observer: '_startTimeChanged',
+            value: '00:00',
           },
           endTime: {
             type: String,
-            observer: '_endTimeChanged',
+            value: '23:59',
           },
           startDateTime: {
             type: Number,
@@ -107,55 +111,26 @@
         this._i18nCalendar(this.$.endDate);
       }
 
-      set startDate(date) {
-        this.startDate = date;
-      }
-
-      set endDate(date) {
-        this.endDate = date;
-      }
-
-      set startTime(time) {
-        this.startTime = time;
-      }
-
-      set endTime(time) {
-        this.endTime = time;
-      }
-
-      _startDateChanged(newDate, oldDate) {
-        if (newDate === '') {
-          this.startDate = Sugar.Date.format(
-            new Date().rewind('1 day', true),
-            '%Y-%m-%d'
-          );
-        }
-      }
-
-      _endDateChanged(newDate, oldDate) {
-        if (newDate === '') {
-          this.endDate = Sugar.Date.format(new Date(), '%Y-%m-%d');
-        }
-      }
-
-      _startTimeChanged(newTime, oldTime) {
-        if (newTime === '') {
-          this.startTime = '00:00';
-        }
-      }
-
-      _endTimeChanged(newTime, oldTime) {
-        if (newTime === '') {
-          this.endTime = '23:59';
-        }
-      }
-
       _computeStartDateTime(startDate, startTime) {
-        console.log(startDate, startTime);
+        if (!!startDate && !!startTime) {
+          const [hours, minutes] = startTime.split(':');
+          const date = Sugar.Date.create(startDate)
+            .addHours(hours)
+            .addMinutes(minutes);
+
+          return date;
+        }
       }
 
       _computeEndDateTime(endDate, endTime) {
-        console.log(endDate, endTime);
+        if (!!endDate && !!endTime) {
+          const [hours, minutes] = endTime.split(':');
+          const date = Sugar.Date.create(endDate)
+            .addHours(hours)
+            .addMinutes(minutes);
+
+          return date;
+        }
       }
 
       _i18nCalendar(calendar) {
@@ -173,13 +148,13 @@
             '_'
           ),
           weekdaysShort: 'so_mo_di_mi_do_fr_sa'.split('_'),
-          formatDate: function(date) {
+          formatDate(date) {
             return Sugar.Date.format(Sugar.Date.create(date), '{short}');
           },
-          formatTitle: function(monthName, fullYear) {
-            return monthName + ' ' + fullYear;
+          formatTitle(monthName, fullYear) {
+            return `${monthName} ${fullYear}`;
           },
-          parseDate: function(dateString) {
+          parseDate(dateString) {
             const date = Sugar.Date.create(dateString);
             return {
               day: date.getDate(),
