@@ -6,7 +6,8 @@
     "polymer": "Polymer/polymer#^2.0.0",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.0.0",
     "sugar": "^2.0.4",
-    "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.0.1"
+    "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.0.1",
+    "vaadin-time-picker": "vaadin/vaadin-time-picker"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
@@ -14,6 +15,12 @@
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "resolutions": {
-    "polymer": "^2.0.0"
+    "polymer": "^2.0.0",
+    "vaadin-themable-mixin": "p3-preview",
+    "vaadin-control-state-mixin": "p3-preview",
+    "vaadin-lumo-styles": "p3-preview",
+    "vaadin-element-mixin": "p3-preview",
+    "vaadin-overlay": "p3-preview",
+    "vaadin-text-field": "p3-preview"
   }
 }

@@ -2,6 +2,7 @@
 
 <link rel="import" href="../vaadin-ordered-layout/vaadin-vertical-layout.html">
 <link rel="import" href="../vaadin-date-picker/vaadin-date-picker.html">
+<link rel="import" href="../vaadin-time-picker/vaadin-time-picker.html">
 
 <script src="../sugar/dist/sugar.min.js"></script>
 <script src="../sugar/dist/locales/de.js"></script>
@@ -31,6 +32,9 @@
             id="startDate"
             value="{{startDate}}"></vaadin-date-picker>
         </div>
+        <div class="block">
+          <vaadin-time-picker value="{{startTime}}"></vaadin-time-picker>
+        </div>
       </vaadin-vertical-layout>
       <vaadin-vertical-layout theme="padding">
         <h3 class="block">
@@ -40,6 +44,9 @@
           <vaadin-date-picker
             id="endDate"
             value="{{endDate}}"></vaadin-date-picker>
+        </div>
+        <div class="block">
+          <vaadin-time-picker value="{{endTime}}"></vaadin-time-picker>
         </div>
       </vaadin-vertical-layout>
     </div>
@@ -59,12 +66,28 @@
         return {
           startDate: {
             type: String,
-            computed: '_computeStartDate()'
+            observer: '_startDateChanged'
           },
           endDate: {
             type: String,
-            computed: '_computeEndDate()'
-          }
+            observer: '_endDateChanged'
+          },
+          startTime: {
+            type: String,
+            observer: '_startTimeChanged'
+          },
+          endTime: {
+            type: String,
+            observer: '_endTimeChanged'
+          },
+          startDateTime: {
+            type: Number,
+            computed: '_computeStartDateTime(startDate, startTime)'
+          },
+          endDateTime: {
+            type: Number,
+            computed: '_computeEndDateTime(endDate, endTime)'
+          },
         };
       }
 
@@ -82,12 +105,52 @@
         this._i18nCalendar(this.$.endDate);
       }
 
-      _computeStartDate() {
-        return this.startDate === undefined ? Sugar.Date.format(new Date().rewind('1 day', true), '%Y-%m-%d') : this.startDate;
+      set startDate(date) {
+        this.startDate = date;
       }
 
-      _computeEndDate(bar) {
-        return this.endDate === undefined ? Sugar.Date.format(new Date(), '%Y-%m-%d') : this.endDate;
+      set endDate(date) {
+        this.endDate = date;
+      }
+
+      set startTime(time) {
+        this.startTime = time;
+      }
+
+      set endTime(time) {
+        this.endTime = time;
+      }
+
+      _startDateChanged(newDate, oldDate) {
+        if (newDate === '') {
+          this.startDate = Sugar.Date.format(new Date().rewind('1 day', true), '%Y-%m-%d');
+        }
+      }
+
+      _endDateChanged(newDate, oldDate) {
+        if (newDate === '') {
+          this.endDate = Sugar.Date.format(new Date(), '%Y-%m-%d');
+        }
+      }
+
+      _startTimeChanged(newTime, oldTime) {
+        if (newTime === '') {
+          this.startTime = '00:00';
+        }
+      }
+
+      _endTimeChanged(newTime, oldTime) {
+        if (newTime === '') {
+          this.endTime = '23:59';
+        }
+      }
+
+      _computeStartDateTime(startDate, startTime) {
+        console.log(startDate, startTime);
+      }
+
+      _computeEndDateTime(endDate, endTime) {
+        console.log(endDate, endTime);
       }
 
       _i18nCalendar(calendar) {
