@@ -1,8 +1,10 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 
+<link rel="import" href="../../vaadin-icons/vaadin-icons.html">
 <link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html">
+
 <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
-<link rel="import" href="../../vaadin-time-picker/vaadin-time-picker.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 
 <script src="../../sugar/dist/sugar.min.js"></script>
 <script src="../../sugar/dist/locales/de.js"></script>
@@ -30,10 +32,16 @@
         <div class="block">
           <vaadin-date-picker
             id="startDate"
-            value="{{startDate}}"></vaadin-date-picker>
+            value="{{startDate}}"
+            error-message="Please enter a valid date"></vaadin-date-picker>
         </div>
         <div class="block">
-          <vaadin-time-picker value="{{startTime}}"></vaadin-time-picker>
+          <vaadin-text-field
+            value="{{startTime}}"
+            pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+            error-message="Please enter a valid time">
+            <iron-icon icon="vaadin:clock" slot="suffix"></iron-icon>
+          </vaadin-text-field>
         </div>
       </vaadin-vertical-layout>
       <vaadin-vertical-layout theme="padding">
@@ -46,7 +54,11 @@
             value="{{endDate}}"></vaadin-date-picker>
         </div>
         <div class="block">
-          <vaadin-time-picker value="{{endTime}}"></vaadin-time-picker>
+          <vaadin-text-field
+            value="{{endTime}}"
+            pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$">
+            <iron-icon icon="vaadin:clock" slot="suffix"></iron-icon>
+          </vaadin-text-field>
         </div>
       </vaadin-vertical-layout>
     </div>
@@ -66,10 +78,6 @@
       }
       static get properties() {
         return {
-          // startDate: {
-          //   type: String,
-          //   observer: '_startDateChanged',
-          // },
           startDate: {
             type: String,
             value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
