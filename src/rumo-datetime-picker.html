@@ -6,57 +6,32 @@
 <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 
+<link rel="import" href="bower_components/vaadin-lumo-styles/color.html">
+<link rel="import" href="bower_components/vaadin-lumo-styles/sizing.html">
+<link rel="import" href="bower_components/vaadin-lumo-styles/spacing.html">
+<link rel="import" href="bower_components/vaadin-lumo-styles/style.html">
+<link rel="import" href="bower_components/vaadin-lumo-styles/typography.html">
+
 <script src="../../sugar/dist/sugar.min.js"></script>
 <script src="../../sugar/dist/locales/de.js"></script>
 
 <dom-module id="rumo-datetime-picker">
   <template>
-    <style>
-      :host {
-        display: block;
-      }
-
-      :host([hidden]) {
-        display: none !important;
-      }
-
-      h3 {
-        margin-top: 0;
-      }
-    </style>
+    <style include="lumo-color lumo-typography"></style>
     <div class="container">
       <vaadin-vertical-layout theme="padding">
-        <h3 class="block">
-          Anfang
-        </h3>
+        <label class="block">[[label]]</label>
         <div class="block">
           <vaadin-date-picker
-            id="startDate"
-            value="{{startDate}}"
+            id="date"
+            value="{{date}}"
             error-message="Please enter a valid date"></vaadin-date-picker>
         </div>
         <div class="block">
           <vaadin-text-field
-            value="{{startTime}}"
+            value="{{time}}"
             pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
             error-message="Please enter a valid time">
-            <iron-icon icon="vaadin:clock" slot="suffix"></iron-icon>
-          </vaadin-text-field>
-        </div>
-      </vaadin-vertical-layout>
-      <vaadin-vertical-layout theme="padding">
-        <h3 class="block">
-          Ende
-        </h3>
-        <div class="block">
-          <vaadin-date-picker
-            id="endDate"
-            value="{{endDate}}"></vaadin-date-picker>
-        </div>
-        <div class="block">
-          <vaadin-text-field
-            value="{{endTime}}"
-            pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$">
             <iron-icon icon="vaadin:clock" slot="suffix"></iron-icon>
           </vaadin-text-field>
         </div>
@@ -78,29 +53,22 @@
       }
       static get properties() {
         return {
-          startDate: {
+          date: {
             type: String,
             value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
           },
-          endDate: {
-            type: String,
-            value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
+          dateTime: {
+            type: Number,
+            computed: '_computeDateTime(date, time)',
           },
-          startTime: {
+          label: {
+            type: String,
+            value: '',
+            observer: '_labelChanged'
+          },
+          time: {
             type: String,
             value: '00:00',
-          },
-          endTime: {
-            type: String,
-            value: '23:59',
-          },
-          startDateTime: {
-            type: Number,
-            computed: '_computeStartDateTime(startDate, startTime)',
-          },
-          endDateTime: {
-            type: Number,
-            computed: '_computeEndDateTime(endDate, endTime)',
           },
         };
       }
@@ -115,29 +83,25 @@
         super.ready();
 
         Sugar.Date.setLocale('de');
-        this._i18nCalendar(this.$.startDate);
-        this._i18nCalendar(this.$.endDate);
+        this._i18nCalendar(this.$.date);
       }
 
-      _computeStartDateTime(startDate, startTime) {
-        if (!!startDate && !!startTime) {
-          const [hours, minutes] = startTime.split(':');
-          const date = Sugar.Date.create(startDate)
+      _computeDateTime(date, time) {
+        if (!!date && !!time) {
+          const [hours, minutes] = time.split(':');
+          const dateTime = Sugar.Date.create(date)
             .addHours(hours)
             .addMinutes(minutes);
 
-          return date;
+          return dateTime;
         }
       }
 
-      _computeEndDateTime(endDate, endTime) {
-        if (!!endDate && !!endTime) {
-          const [hours, minutes] = endTime.split(':');
-          const date = Sugar.Date.create(endDate)
-            .addHours(hours)
-            .addMinutes(minutes);
-
-          return date;
+      _labelChanged(label) {
+        if (label !== '' && label != null) {
+          this.setAttribute('has-label', '');
+        } else {
+          this.removeAttribute('has-label');
         }
       }
 

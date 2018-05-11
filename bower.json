@@ -8,7 +8,8 @@
     "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.0.1",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.0.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.0.1",
-    "vaadin-icons": "vaadin/vaadin-icons#^4.1.4"
+    "vaadin-icons": "vaadin/vaadin-icons#^4.1.4",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
