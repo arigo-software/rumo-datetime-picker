@@ -1,8 +1,7 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 
 <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html">
-
+<link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html"> 
 <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 
@@ -24,11 +23,14 @@
         <div class="block">
           <vaadin-date-picker
             id="date"
+            max="[[_maxDate]]"
+            min="[[_minDate]]"
             value="{{date}}"
             error-message="Please enter a valid date"></vaadin-date-picker>
         </div>
         <div class="block">
           <vaadin-text-field
+            id="time"
             value="{{time}}"
             pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
             error-message="Please enter a valid time">
@@ -58,13 +60,23 @@
             value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
           },
           dateTime: {
-            type: Number,
+            type: Object,
             computed: '_computeDateTime(date, time)',
           },
           label: {
             type: String,
             value: '',
             observer: '_labelChanged',
+          },
+          max: {
+            type: String,
+            observer: '_maxChanged',
+            reflectToAttribute: true,
+          },
+          min: {
+            type: String,
+            observer: '_minChanged',
+            reflectToAttribute: true,
           },
           time: {
             type: String,
@@ -84,6 +96,13 @@
 
         Sugar.Date.setLocale('de');
         this._i18nCalendar(this.$.date);
+
+        if (
+          (this.min != null && this.min !== '') ||
+          (this.max != null && this.max !== '')
+        ) {
+          this.$.time.addEventListener('blur', this._timeChanged.bind(this));
+        }
       }
 
       _computeDateTime(date, time) {
@@ -93,7 +112,6 @@
             .addHours(hours)
             .addMinutes(minutes);
 
-          console.log(dateTime);
           return dateTime;
         }
       }
@@ -103,6 +121,80 @@
           this.setAttribute('has-label', '');
         } else {
           this.removeAttribute('has-label');
+        }
+      }
+
+      _handleDateChange(property, value, oldValue) {
+        if (!value) {
+          this[property] = '';
+          return;
+        }
+
+        const isDate = Object.prototype.toString.call(value) === '[object Date]';
+
+        if (isDate) {
+          this._updateDateTime(property, value);
+          this[property] = Sugar.Date.format(value, '%Y-%m-%d');
+        } else {
+          this[property] = !!oldValue
+            ? Sugar.Date.format(oldValue, '%Y-%m-%d')
+            : '';
+        }
+      }
+
+      _updateDateTime(property, value) {
+        const dateTime = Sugar.Date.create(this.dateTime);
+        const dtDate = Sugar.Date.format(dateTime, '%Y-%m-%d');
+        const dtTime = Sugar.Date.format(dateTime, '%H:%M');
+        const [dtHours, dtMinutes] = dtTime.split(':');
+        const dateTimeBOD = Sugar.Date.create(`${dtDate} 00:00:00`);
+
+        const date = Sugar.Date.create(value);
+        const dDate = Sugar.Date.format(date, '%Y-%m-%d');
+        const dTime = Sugar.Date.format(date, '%H:%M');
+        const [dHours, dMinutes] = dTime.split(':');
+        const dateBOD = Sugar.Date.create(`${dDate} 00:00:00`);
+
+        if (property === '_maxDate') {
+          const temp = dateBOD.addHours(dtHours).addMinutes(dtMinutes);
+
+          if (dateTimeBOD.isAfter(dateBOD)) {
+            this.date = dDate;
+          }
+
+          if (temp.isAfter(date)) {
+            this.time = dTime;
+          }
+        }
+
+        if (property === '_minDate') {
+          const temp = dateBOD.addHours(dtHours).addMinutes(dtMinutes);
+
+          if (dateTimeBOD.isBefore(dateBOD)) {
+            this.date = dDate;
+          }
+
+          if (temp.isBefore(date)) {
+            this.time = dTime;
+          }
+        }
+      }
+
+      _maxChanged(value, oldValue) {
+        this._handleDateChange('_maxDate', value, oldValue);
+      }
+
+      _minChanged(value, oldValue) {
+        this._handleDateChange('_minDate', value, oldValue);
+      }
+
+      _timeChanged() {
+        if (this.max != null && this.max !== '') {
+          this._updateDateTime('_maxDate', this.max);
+        }
+
+        if (this.min != null && this.min !== '') {
+          this._updateDateTime('_minDate', this.min);
         }
       }
 
