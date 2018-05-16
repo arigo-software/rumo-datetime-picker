@@ -7,12 +7,12 @@ date.
 
 First, make sure you have the
 [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run
-`polymer serve` to serve your element locally.
+`npm start` to serve your element locally.
 
 ## Viewing Element
 
 ```
-$ polymer serve
+$ npm start
 ```
 
 ## Linting Code
@@ -24,9 +24,9 @@ $ npm run lint
 ## Running Tests
 
 ```
-$ polymer test
+$ npm test
 ```
 
 Your application is already set up to be tested via
 [web-component-tester](https://github.com/Polymer/web-component-tester). Run
-`polymer test` to run your application's test suite locally.
+`npm test` to run your application's test suite locally.
