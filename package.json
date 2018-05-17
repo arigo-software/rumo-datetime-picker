@@ -37,6 +37,7 @@
     "lint:css": "npx stylelint 'src/*.html'",
     "lint:javascript": "npx eslint --ext .html,.js src",
     "lint:polymer": "polymer lint",
+    "start": "polymer serve --open",
     "test": "polymer test"
   },
   "devDependencies": {
