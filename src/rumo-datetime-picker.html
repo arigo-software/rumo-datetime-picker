@@ -136,9 +136,7 @@
           this._updateDateTime(property, value);
           this[property] = Sugar.Date.format(value, '%Y-%m-%d');
         } else {
-          this[property] = !!oldValue
-            ? Sugar.Date.format(oldValue, '%Y-%m-%d')
-            : '';
+          this[property] = oldValue ? Sugar.Date.format(oldValue, '%Y-%m-%d') : '';
         }
       }
 
@@ -152,7 +150,6 @@
         const date = Sugar.Date.create(value);
         const dDate = Sugar.Date.format(date, '%Y-%m-%d');
         const dTime = Sugar.Date.format(date, '%H:%M');
-        const [dHours, dMinutes] = dTime.split(':');
         const dateBOD = Sugar.Date.create(`${dDate} 00:00:00`);
 
         if (property === '_maxDate') {
@@ -207,10 +204,10 @@
           cancel: 'Abbrechen',
           firstDayOfWeek: 1,
           monthNames: 'Januar_Februar_März_April_Mai_Juni_Juli_August_September_Oktober_November_Dezember'.split(
-            '_'
+            '_',
           ),
           weekdays: 'Sonntag_Montag_Dienstag_Mittwoch_Donnerstag_Freitag_Samstag'.split(
-            '_'
+            '_',
           ),
           weekdaysShort: 'so_mo_di_mi_do_fr_sa'.split('_'),
           formatDate(date) {
