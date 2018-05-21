@@ -42,8 +42,27 @@
   </template>
   <script>
     /**
-     * `rumo-datetime-picker`
-     * rumo-datetime-picker is a Web Component providing a date and time selection field.
+     * <rumo-datetime-picker> is a __Polymer 2__ element providing a date and
+     * time selection field.
+     *
+     * Just add `<rumo-datetime-picker>` at the top of your `<body>`.
+     *
+     * ```html
+     * <rumo-datetime-picker></rumo-datetime-picker>
+     * ```
+     *
+     * With the `label-attribute` you can provide a label.
+     *
+     * ```html
+     * <rumo-datetime-picker label="label"></rumo-datetime-picker>
+     * ```
+     *
+     * If you provide a date object to the `min-attribute` and/or
+     * `max-attribute` you can restrict the date and time to a certain date.
+     *
+     * ```html
+     * <rumo-datetime-picker label="label"></rumo-datetime-picker>
+     * ```
      *
      * @customElement
      * @polymer
@@ -101,7 +120,8 @@
           (this.min != null && this.min !== '') ||
           (this.max != null && this.max !== '')
         ) {
-          this.$.time.addEventListener('blur', this._timeChanged.bind(this));
+          this.$.date.addEventListener('blur', this._dateTimeChanged.bind(this));
+          this.$.time.addEventListener('blur', this._dateTimeChanged.bind(this));
         }
       }
 
@@ -130,13 +150,14 @@
           return;
         }
 
-        const isDate = Object.prototype.toString.call(value) === '[object Date]';
+        const date = this._isDate(value) ? value : Sugar.Date.create(value);
+        const isDate = this._isDate(date);
 
         if (isDate) {
-          this._updateDateTime(property, value);
-          this[property] = Sugar.Date.format(value, '%Y-%m-%d');
+          this._updateDateTime(property, date);
+          this[property] = Sugar.Date.format(date, '%Y-%m-%d');
         } else {
-          this[property] = oldValue ? Sugar.Date.format(oldValue, '%Y-%m-%d') : '';
+          this[property] = oldValue ? oldValue : '';
         }
       }
 
@@ -159,7 +180,7 @@
             this.date = dDate;
           }
 
-          if (temp.isAfter(date)) {
+          if (dDate === dtDate && temp.isAfter(date)) {
             this.time = dTime;
           }
         }
@@ -171,7 +192,7 @@
             this.date = dDate;
           }
 
-          if (temp.isBefore(date)) {
+          if (dDate === dtDate && temp.isBefore(date)) {
             this.time = dTime;
           }
         }
@@ -185,7 +206,7 @@
         this._handleDateChange('_minDate', value, oldValue);
       }
 
-      _timeChanged() {
+      _dateTimeChanged() {
         if (this.max != null && this.max !== '') {
           this._updateDateTime('_maxDate', this.max);
         }
@@ -193,6 +214,10 @@
         if (this.min != null && this.min !== '') {
           this._updateDateTime('_minDate', this.min);
         }
+      }
+
+      _isDate(value) {
+        return Object.prototype.toString.call(value) === '[object Date]';
       }
 
       _i18nCalendar(calendar) {
