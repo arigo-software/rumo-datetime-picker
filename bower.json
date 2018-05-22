@@ -1,6 +1,6 @@
 {
   "name": "rumo-datetime-picker",
-  "description": "rumo-datetime-picker is a Web Component providing a date and time selection field.",
+  "description": "A component to pick date and time",
   "main": "rumo-datetime-picker.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",

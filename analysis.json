@@ -2,7 +2,7 @@
   "schema_version": "1.0.0",
   "elements": [
     {
-      "description": "`rumo-datetime-picker`\nrumo-datetime-picker is a Web Component providing a date and time selection field.",
+      "description": "`<rumo-datetime-picker>` is a __Polymer 2__ element providing a date and\ntime selection field.\n\nJust add `<rumo-datetime-picker>` at the top of your `<body>`.\n\n```html\n<rumo-datetime-picker></rumo-datetime-picker>\n```\n\nWith the `label-attribute` you can provide a label.\n\n```html\n<rumo-datetime-picker label=\"label\"></rumo-datetime-picker>\n```\n\nIf you provide a date object or a date string in the format\n`%Y-%m-%d %H:%M` to the `min-attribute` and/or\n`max-attribute` you can restrict the date and time.\n\n```html\n<rumo-datetime-picker min=\"2018-01-01 15:15\"></rumo-datetime-picker>\n```\n\n```html\n<rumo-datetime-picker max=\"2018-07-01 07:01\"></rumo-datetime-picker>\n```",
       "summary": "",
       "path": "src/rumo-datetime-picker.html",
       "properties": [
@@ -582,17 +582,17 @@
           "inheritedFrom": "Polymer.ElementMixin"
         },
         {
-          "name": "date",
+          "name": "_date",
           "type": "string",
-          "description": "",
-          "privacy": "public",
+          "description": "Value of the date field",
+          "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 57,
+              "line": 82,
               "column": 10
             },
             "end": {
-              "line": 60,
+              "line": 85,
               "column": 11
             }
           },
@@ -603,15 +603,15 @@
         {
           "name": "dateTime",
           "type": "Object",
-          "description": "",
+          "description": "The currently selected date and time as date object",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 61,
+              "line": 87,
               "column": 10
             },
             "end": {
-              "line": 64,
+              "line": 90,
               "column": 11
             }
           },
@@ -624,15 +624,15 @@
         {
           "name": "label",
           "type": "string",
-          "description": "",
+          "description": "Label of the element",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 65,
+              "line": 92,
               "column": 10
             },
             "end": {
-              "line": 69,
+              "line": 96,
               "column": 11
             }
           },
@@ -646,15 +646,15 @@
         {
           "name": "max",
           "type": "string",
-          "description": "",
+          "description": "Max selectable date and time in the form `0000-00-00 00:00`",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 70,
+              "line": 98,
               "column": 10
             },
             "end": {
-              "line": 74,
+              "line": 102,
               "column": 11
             }
           },
@@ -667,15 +667,15 @@
         {
           "name": "min",
           "type": "string",
-          "description": "",
+          "description": "Min selectable date and time in the form `0000-00-00 00:00`",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 75,
+              "line": 104,
               "column": 10
             },
             "end": {
-              "line": 79,
+              "line": 108,
               "column": 11
             }
           },
@@ -686,17 +686,17 @@
           }
         },
         {
-          "name": "time",
+          "name": "_time",
           "type": "string",
-          "description": "",
-          "privacy": "public",
+          "description": "Value of the time field",
+          "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 80,
+              "line": 110,
               "column": 10
             },
             "end": {
-              "line": 83,
+              "line": 113,
               "column": 11
             }
           },
@@ -953,11 +953,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 93,
+              "line": 123,
               "column": 6
             },
             "end": {
-              "line": 105,
+              "line": 137,
               "column": 7
             }
           },
@@ -2870,159 +2870,187 @@
         },
         {
           "name": "_computeDateTime",
-          "description": "",
+          "description": "Calculates the date based on date and time input.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 107,
+              "line": 146,
               "column": 6
             },
             "end": {
-              "line": 116,
+              "line": 155,
               "column": 7
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "date"
+              "name": "date",
+              "type": "String",
+              "description": "The selected date in the form `0000-00-00`."
             },
             {
-              "name": "time"
+              "name": "time",
+              "type": "String",
+              "description": "The selected time in the form `00:00`."
             }
-          ]
+          ],
+          "return": {
+            "type": "Date",
+            "desc": "The calculated date."
+          }
         },
         {
           "name": "_labelChanged",
-          "description": "",
+          "description": "Add or remove the `has-label` attribute on the element.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 118,
+              "line": 162,
               "column": 6
             },
             "end": {
-              "line": 124,
+              "line": 168,
               "column": 7
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "label"
+              "name": "label",
+              "type": "String",
+              "description": "The label."
             }
           ]
         },
         {
           "name": "_handleDateChange",
-          "description": "",
+          "description": "Handle changes of the min and/or max date attributes.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 126,
+              "line": 177,
               "column": 6
             },
             "end": {
-              "line": 140,
+              "line": 199,
               "column": 7
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "property"
+              "name": "property",
+              "type": "String",
+              "description": "The changed property, `_minDate` or `_maxDate`."
             },
             {
-              "name": "value"
+              "name": "value",
+              "type": "String",
+              "description": "The new value."
             },
             {
-              "name": "oldValue"
+              "name": "oldValue",
+              "type": "String",
+              "description": "The old value."
             }
           ]
         },
         {
           "name": "_updateDateTime",
-          "description": "",
+          "description": "Handle changes of the min and/or max date attributes.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 142,
+              "line": 207,
               "column": 6
             },
             "end": {
-              "line": 177,
+              "line": 252,
               "column": 7
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "property"
+              "name": "property",
+              "type": "String",
+              "description": "`_minDate` or `_maxDate`."
             },
             {
-              "name": "value"
+              "name": "value",
+              "type": "Date",
+              "description": "The min or max date."
             }
           ]
         },
         {
           "name": "_maxChanged",
-          "description": "",
+          "description": "React to a set max date.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 179,
+              "line": 260,
               "column": 6
             },
             "end": {
-              "line": 181,
+              "line": 262,
               "column": 7
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "value"
+              "name": "value",
+              "type": "String",
+              "description": "The new max value."
             },
             {
-              "name": "oldValue"
+              "name": "oldValue",
+              "type": "String",
+              "description": "The old max value."
             }
           ]
         },
         {
           "name": "_minChanged",
-          "description": "",
+          "description": "React to a set min date.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 183,
+              "line": 270,
               "column": 6
             },
             "end": {
-              "line": 185,
+              "line": 272,
               "column": 7
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "value"
+              "name": "value",
+              "type": "String",
+              "description": "The new min value."
             },
             {
-              "name": "oldValue"
+              "name": "oldValue",
+              "type": "String",
+              "description": "The old min value."
             }
           ]
         },
         {
-          "name": "_timeChanged",
-          "description": "",
+          "name": "_dateTimeChanged",
+          "description": "Trigger a check if the value of date or time changed",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 187,
+              "line": 275,
               "column": 6
             },
             "end": {
-              "line": 195,
+              "line": 283,
               "column": 7
             }
           },
@@ -3030,16 +3058,43 @@
           "params": []
         },
         {
-          "name": "_i18nCalendar",
-          "description": "",
+          "name": "_isDate",
+          "description": "Checck if the provided value is a date object.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 197,
+              "line": 291,
               "column": 6
             },
             "end": {
-              "line": 227,
+              "line": 293,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "value",
+              "type": "Date",
+              "description": "The date object."
+            }
+          ],
+          "return": {
+            "type": "Boolean",
+            "desc": "The result of the check."
+          }
+        },
+        {
+          "name": "_i18nCalendar",
+          "description": "Change the format and labels for the selected language of the calendar.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 300,
+              "column": 6
+            },
+            "end": {
+              "line": 330,
               "column": 7
             }
           },
@@ -3995,11 +4050,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 51,
+          "line": 75,
           "column": 4
         },
         "end": {
-          "line": 228,
+          "line": 331,
           "column": 5
         }
       },
@@ -4008,31 +4063,15 @@
       "name": "RumoDatetimePicker",
       "attributes": [
         {
-          "name": "date",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 57,
-              "column": 10
-            },
-            "end": {
-              "line": 60,
-              "column": 11
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
           "name": "date-time",
-          "description": "",
+          "description": "The currently selected date and time as date object",
           "sourceRange": {
             "start": {
-              "line": 61,
+              "line": 87,
               "column": 10
             },
             "end": {
-              "line": 64,
+              "line": 90,
               "column": 11
             }
           },
@@ -4041,14 +4080,14 @@
         },
         {
           "name": "label",
-          "description": "",
+          "description": "Label of the element",
           "sourceRange": {
             "start": {
-              "line": 65,
+              "line": 92,
               "column": 10
             },
             "end": {
-              "line": 69,
+              "line": 96,
               "column": 11
             }
           },
@@ -4057,14 +4096,14 @@
         },
         {
           "name": "max",
-          "description": "",
+          "description": "Max selectable date and time in the form `0000-00-00 00:00`",
           "sourceRange": {
             "start": {
-              "line": 70,
+              "line": 98,
               "column": 10
             },
             "end": {
-              "line": 74,
+              "line": 102,
               "column": 11
             }
           },
@@ -4073,30 +4112,14 @@
         },
         {
           "name": "min",
-          "description": "",
+          "description": "Min selectable date and time in the form `0000-00-00 00:00`",
           "sourceRange": {
             "start": {
-              "line": 75,
+              "line": 104,
               "column": 10
             },
             "end": {
-              "line": 79,
-              "column": 11
-            }
-          },
-          "metadata": {},
-          "type": "string"
-        },
-        {
-          "name": "time",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 80,
-              "column": 10
-            },
-            "end": {
-              "line": 83,
+              "line": 108,
               "column": 11
             }
           },

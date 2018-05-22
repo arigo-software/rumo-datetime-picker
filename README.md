@@ -1,7 +1,13 @@
 # \<rumo-datetime-picker\>
 
-rumo-datetime-picker is a Web Component which lets you choose a start and end
-date.
+`<rumo-datetime-picker>` is a __Polymer 2__ element which lets you choose a date
+and time.
+
+```html
+<rumo-datetime-picker label="Label"></rumo-datetime-picker>
+```
+
+![Screenshot of rumo-datetime-picker](https://raw.githubusercontent.com/arigo-software/arigo-datetimepicker/master/screenshot.png)
 
 ## Install the Polymer-CLI
 
@@ -11,19 +17,19 @@ First, make sure you have the
 
 ## Viewing Element
 
-```
+```sh
 $ npm start
 ```
 
 ## Linting Code
 
-```
+```sh
 $ npm run lint
 ```
 
 ## Running Tests
 
-```
+```sh
 $ npm test
 ```
 
