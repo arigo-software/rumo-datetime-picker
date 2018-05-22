@@ -1,31 +1,36 @@
 {
   "name": "arigo-datetime-picker",
   "description": "Simple date-time-picker based on vaadin-components",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "node": "8.x.x"
   },
-  "main": "index.html",
+  "main": "src/rumo-datetime-picker.html",
   "repository": {
     "type": "git",
     "url": "git@github.com:stefanfrede/arigo-datetimepicker.git"
   },
   "keywords": [
     "Arigo",
+    "Arigo-Software",
     "date-time-picker",
     "datetime-picker",
     "web-component",
     "web-components",
     "polymer"
   ],
-  "author": "Stefan Frede <public@frede.biz>",
+  "contributors": [
+    "Stefan Frede <public@frede.biz>"
+  ],
   "license": "UNLICENSED",
+  "private": true,
   "bugs": {
     "url": "https://github.com/stefanfrede/arigo-datetimepicker/issues"
   },
   "homepage": "https://github.com/stefanfrede/arigo-datetimepicker#readme",
   "browserslist": [
-    "last 2 versions"
+    "last 2 versions",
+    "not ie <= 10"
   ],
   "lint-staged": {
     "src/**/*.html": [
