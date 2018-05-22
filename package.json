@@ -8,7 +8,7 @@
   "main": "src/rumo-datetime-picker.html",
   "repository": {
     "type": "git",
-    "url": "git@github.com:stefanfrede/arigo-datetimepicker.git"
+    "url": "git@github.com:arigo-software/arigo-datetimepicker.git"
   },
   "keywords": [
     "Arigo",
@@ -25,9 +25,9 @@
   "license": "UNLICENSED",
   "private": true,
   "bugs": {
-    "url": "https://github.com/stefanfrede/arigo-datetimepicker/issues"
+    "url": "https://github.com/arigo-software/arigo-datetimepicker/issues"
   },
-  "homepage": "https://github.com/stefanfrede/arigo-datetimepicker#readme",
+  "homepage": "https://github.com/arigo-software/arigo-datetimepicker#readme",
   "browserslist": [
     "last 2 versions",
     "not ie <= 10"
