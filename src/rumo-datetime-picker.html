@@ -25,13 +25,13 @@
             id="date"
             max="[[_maxDate]]"
             min="[[_minDate]]"
-            value="{{date}}"
+            value="{{_date}}"
             error-message="Please enter a valid date"></vaadin-date-picker>
         </div>
         <div class="block">
           <vaadin-text-field
             id="time"
-            value="{{time}}"
+            value="{{_time}}"
             pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
             error-message="Please enter a valid time">
             <iron-icon icon="vaadin:clock" slot="suffix"></iron-icon>
@@ -74,7 +74,7 @@
       }
       static get properties() {
         return {
-          date: {
+          _date: {
             type: String,
             value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
           },
@@ -97,7 +97,7 @@
             observer: '_minChanged',
             reflectToAttribute: true,
           },
-          time: {
+          _time: {
             type: String,
             value: '00:00',
           },
@@ -177,11 +177,11 @@
           const temp = dateBOD.addHours(dtHours).addMinutes(dtMinutes);
 
           if (dateTimeBOD.isAfter(dateBOD)) {
-            this.date = dDate;
+            this._date = dDate;
           }
 
           if (dDate === dtDate && temp.isAfter(date)) {
-            this.time = dTime;
+            this._time = dTime;
           }
         }
 
@@ -189,11 +189,11 @@
           const temp = dateBOD.addHours(dtHours).addMinutes(dtMinutes);
 
           if (dateTimeBOD.isBefore(dateBOD)) {
-            this.date = dDate;
+            this._date = dDate;
           }
 
           if (dDate === dtDate && temp.isBefore(date)) {
-            this.time = dTime;
+            this._time = dTime;
           }
         }
       }
