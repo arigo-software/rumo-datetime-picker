@@ -25,13 +25,13 @@
             id="date"
             max="[[_maxDate]]"
             min="[[_minDate]]"
-            value="{{date}}"
+            value="{{_date}}"
             error-message="Please enter a valid date"></vaadin-date-picker>
         </div>
         <div class="block">
           <vaadin-text-field
             id="time"
-            value="{{time}}"
+            value="{{_time}}"
             pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
             error-message="Please enter a valid time">
             <iron-icon icon="vaadin:clock" slot="suffix"></iron-icon>
@@ -42,8 +42,32 @@
   </template>
   <script>
     /**
-     * `rumo-datetime-picker`
-     * rumo-datetime-picker is a Web Component providing a date and time selection field.
+     * `<rumo-datetime-picker>` is a __Polymer 2__ element providing a date and
+     * time selection field.
+     *
+     * Just add `<rumo-datetime-picker>` at the top of your `<body>`.
+     *
+     * ```html
+     * <rumo-datetime-picker></rumo-datetime-picker>
+     * ```
+     *
+     * With the `label-attribute` you can provide a label.
+     *
+     * ```html
+     * <rumo-datetime-picker label="label"></rumo-datetime-picker>
+     * ```
+     *
+     * If you provide a date object or a date string in the format
+     * `%Y-%m-%d %H:%M` to the `min-attribute` and/or
+     * `max-attribute` you can restrict the date and time.
+     *
+     * ```html
+     * <rumo-datetime-picker min="2018-01-01 15:15"></rumo-datetime-picker>
+     * ```
+     *
+     * ```html
+     * <rumo-datetime-picker max="2018-07-01 07:01"></rumo-datetime-picker>
+     * ```
      *
      * @customElement
      * @polymer
@@ -55,30 +79,36 @@
       }
       static get properties() {
         return {
-          date: {
+          /** Value of the date field */
+          _date: {
             type: String,
             value: Sugar.Date.format(new Date(), '%Y-%m-%d'),
           },
+          /** The currently selected date and time as date object  */
           dateTime: {
             type: Object,
             computed: '_computeDateTime(date, time)',
           },
+          /** Label of the element */
           label: {
             type: String,
             value: '',
             observer: '_labelChanged',
           },
+          /** Max selectable date and time in the form `0000-00-00 00:00` */
           max: {
             type: String,
             observer: '_maxChanged',
             reflectToAttribute: true,
           },
+          /** Min selectable date and time in the form `0000-00-00 00:00` */
           min: {
             type: String,
             observer: '_minChanged',
             reflectToAttribute: true,
           },
-          time: {
+          /** Value of the time field */
+          _time: {
             type: String,
             value: '00:00',
           },
@@ -97,16 +127,25 @@
         Sugar.Date.setLocale('de');
         this._i18nCalendar(this.$.date);
 
+        // Check if the min or max attribute have values
         if (
           (this.min != null && this.min !== '') ||
           (this.max != null && this.max !== '')
         ) {
-          this.$.time.addEventListener('blur', this._timeChanged.bind(this));
+          this.$.date.addEventListener('blur', this._dateTimeChanged.bind(this));
+          this.$.time.addEventListener('blur', this._dateTimeChanged.bind(this));
         }
       }
 
+      /**
+       * Calculates the date based on date and time input.
+       *
+       * @param {String} date The selected date in the form `0000-00-00`.
+       * @param {String} time The selected time in the form `00:00`.
+       * @return {Date} The calculated date.
+       */
       _computeDateTime(date, time) {
-        if (!!date && !!time) {
+        if (date && time) {
           const [hours, minutes] = time.split(':');
           const dateTime = Sugar.Date.create(date)
             .addHours(hours)
@@ -116,6 +155,11 @@
         }
       }
 
+      /**
+       * Add or remove the `has-label` attribute on the element.
+       *
+       * @param {String} label The label.
+       */
       _labelChanged(label) {
         if (label !== '' && label != null) {
           this.setAttribute('has-label', '');
@@ -124,22 +168,43 @@
         }
       }
 
+      /**
+       * Handle changes of the min and/or max date attributes.
+       *
+       * @param {String} property The changed property, `_minDate` or `_maxDate`.
+       * @param {String} value The new value.
+       * @param {String} oldValue The old value.
+       */
       _handleDateChange(property, value, oldValue) {
+        // If no new value is provided set the property to an empty string and
+        // exit the function.
         if (!value) {
           this[property] = '';
           return;
         }
 
-        const isDate = Object.prototype.toString.call(value) === '[object Date]';
+        // Check if value is a date object and if not try to create one.
+        const date = this._isDate(value) ? value : Sugar.Date.create(value);
+        // Check if date is a date object.
+        const isDate = this._isDate(date);
 
+        // If date is a date object set the min or max values on the date and
+        // time input fields.
+        // If not reset the min or max attributes to their old values.
         if (isDate) {
-          this._updateDateTime(property, value);
-          this[property] = Sugar.Date.format(value, '%Y-%m-%d');
+          this._updateDateTime(property, date);
+          this[property] = Sugar.Date.format(date, '%Y-%m-%d');
         } else {
-          this[property] = oldValue ? Sugar.Date.format(oldValue, '%Y-%m-%d') : '';
+          this[property] = oldValue ? oldValue : '';
         }
       }
 
+      /**
+       * Handle changes of the min and/or max date attributes.
+       *
+       * @param {String} property `_minDate` or `_maxDate`.
+       * @param {Date} value The min or max date.
+       */
       _updateDateTime(property, value) {
         const dateTime = Sugar.Date.create(this.dateTime);
         const dtDate = Sugar.Date.format(dateTime, '%Y-%m-%d');
@@ -153,39 +218,62 @@
         const dateBOD = Sugar.Date.create(`${dDate} 00:00:00`);
 
         if (property === '_maxDate') {
+          // Create a temporary date from the selected max date and the selected
+          // time.
           const temp = dateBOD.addHours(dtHours).addMinutes(dtMinutes);
 
+          // Check if the selected date is after the max date.
           if (dateTimeBOD.isAfter(dateBOD)) {
-            this.date = dDate;
+            this._date = dDate;
           }
 
-          if (temp.isAfter(date)) {
-            this.time = dTime;
+          // Check if the selected date is the max date and if the temporary
+          // date is after the max date.
+          if (dDate === dtDate && temp.isAfter(date)) {
+            this._time = dTime;
           }
         }
 
         if (property === '_minDate') {
+          // Create a temporary date from the selected min date and the selected
+          // time.
           const temp = dateBOD.addHours(dtHours).addMinutes(dtMinutes);
 
+          // Check if the selected date is before the min date.
           if (dateTimeBOD.isBefore(dateBOD)) {
-            this.date = dDate;
+            this._date = dDate;
           }
 
-          if (temp.isBefore(date)) {
-            this.time = dTime;
+          // Check if the selected date is the min date and if the temporary
+          // date is before the min date.
+          if (dDate === dtDate && temp.isBefore(date)) {
+            this._time = dTime;
           }
         }
       }
 
+      /**
+       * React to a set max date.
+       *
+       * @param {String} value The new max value.
+       * @param {String} oldValue The old max value.
+       */
       _maxChanged(value, oldValue) {
         this._handleDateChange('_maxDate', value, oldValue);
       }
 
+      /**
+       * React to a set min date.
+       *
+       * @param {String} value The new min value.
+       * @param {String} oldValue The old min value.
+       */
       _minChanged(value, oldValue) {
         this._handleDateChange('_minDate', value, oldValue);
       }
 
-      _timeChanged() {
+      /** Trigger a check if the value of date or time changed */
+      _dateTimeChanged() {
         if (this.max != null && this.max !== '') {
           this._updateDateTime('_maxDate', this.max);
         }
@@ -195,6 +283,21 @@
         }
       }
 
+      /**
+       * Check if the provided value is a date object.
+       *
+       * @param {Date} value The date object.
+       * @return {Boolean} The result of the check.
+       */
+      _isDate(value) {
+        return Object.prototype.toString.call(value) === '[object Date]';
+      }
+
+      /**
+       * Change the format and labels for the selected language of the calendar.
+       *
+       * @param {HTMLElement} The date element.
+       */
       _i18nCalendar(calendar) {
         calendar.i18n = {
           week: 'Woche',
