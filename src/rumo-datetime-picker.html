@@ -16,7 +16,24 @@
 
 <dom-module id="rumo-datetime-picker">
   <template>
-    <style include="lumo-color lumo-typography">/* empty */</style>
+    <style include="lumo-color lumo-typography">
+      :host {
+        display: inline-flex;
+        outline: none;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host > .container > vaadin-vertical-layout > label {
+        display: none;
+      }
+
+      :host([has-label]) > .container > vaadin-vertical-layout > label {
+        display: block;
+      }
+    </style>
     <div class="container">
       <vaadin-vertical-layout theme="padding">
         <label class="block">[[label]]</label>
@@ -87,7 +104,7 @@
           /** The currently selected date and time as date object  */
           dateTime: {
             type: Object,
-            computed: '_computeDateTime(date, time)',
+            computed: '_computeDateTime(_date, _time)',
           },
           /** Label of the element */
           label: {
@@ -99,13 +116,11 @@
           max: {
             type: String,
             observer: '_maxChanged',
-            reflectToAttribute: true,
           },
           /** Min selectable date and time in the form `0000-00-00 00:00` */
           min: {
             type: String,
             observer: '_minChanged',
-            reflectToAttribute: true,
           },
           /** Value of the time field */
           _time: {

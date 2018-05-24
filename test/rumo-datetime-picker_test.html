@@ -10,6 +10,10 @@
     <script src="../../web-component-tester/browser.js"></script>
 
     <link rel="import" href="../src/rumo-datetime-picker.html">
+
+
+    <script src="../bower_components/sugar/dist/sugar.min.js"></script>
+    <script src="../bower_components/sugar/dist/locales/de.js"></script>
   </head>
   <body>
 
@@ -19,33 +23,171 @@
       </template>
     </test-fixture>
 
-    <test-fixture id="ChangedPropertyTestFixture">
+    <test-fixture id="ChangedLabelTestFixture">
       <template>
-        <rumo-datetime-picker prop1="new-prop1"></rumo-datetime-picker>
+        <rumo-datetime-picker label="Label"></rumo-datetime-picker>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedMaxDateTestFixture">
+      <template>
+        <rumo-datetime-picker max="2018-08-08 08:08"></rumo-datetime-picker>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="ChangedMinDateTestFixture">
+      <template>
+        <rumo-datetime-picker max="2011-01-01 01:01"></rumo-datetime-picker>
       </template>
     </test-fixture>
 
     <script>
-      suite('rumo-datetime-picker', () => {
+      Sugar.extend();
+
+      suite('basic', () => {
 
         test('instantiating the element with default properties works', () => {
           const element = fixture('BasicTestFixture');
-          assert.equal(element.prop1, 'rumo-datetime-picker');
+
+          const date = Sugar.Date.format(new Date(), '%Y-%m-%d');
+          const dateBOD = Sugar.Date.create(new Date()).beginningOfDay();
+          assert.equal(element._date, date);
+          assert.equal(element._time, '00:00');
+          assert.deepEqual(element.dateTime, dateBOD);
+          assert.equal(element.max, null);
+          assert.equal(element.min, null);
+
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello rumo-datetime-picker!');
+
+          const elementLabel = elementShadowRoot.querySelector('label');
+          const elementLabelStyles = window.getComputedStyle(elementLabel, null);
+          assert.equal(elementLabelStyles.getPropertyValue('display'), 'none');
+
+          const elementDateInput = elementShadowRoot.querySelector('#date');
+          assert.equal(elementDateInput.value, date);
+
+          const elementTimeInput = elementShadowRoot.querySelector('#time');
+          assert.equal(elementTimeInput.value, '00:00');
         });
 
-        test('setting a property on the element works', () => {
-          // Create a test fixture
-          const element = fixture('ChangedPropertyTestFixture');
-          assert.equal(element.prop1, 'new-prop1');
+        test('setting a label on the element works', () => {
+          const element = fixture('ChangedLabelTestFixture');
+          assert.equal(element.label, 'Label');
+
           const elementShadowRoot = element.shadowRoot;
-          const elementHeader = elementShadowRoot.querySelector('h2');
-          assert.equal(elementHeader.innerHTML, 'Hello new-prop1!');
+          const elementLabel = elementShadowRoot.querySelector('label');
+          const elementLabelStyles = window.getComputedStyle(elementLabel, null);
+          assert.equal(elementLabel.innerHTML, 'Label');
+          assert.equal(elementLabelStyles.getPropertyValue('display'), 'block');
+        });
+
+        test('setting a max date on the element works', () => {
+          const element = fixture('ChangedMaxDateTestFixture');
+
+          assert.equal(element.max, '2018-08-08 08:08');
+        });
+
+        test('setting a min date on the element works', () => {
+          const element = fixture('ChangedMinDateTestFixture');
+
+          assert.equal(element.max, '2011-01-01 01:01');
         });
 
       });
+
+      // suite('max-date', function() {
+      //   let element;
+      //   let elementShadowRoot;
+      //
+      //   let date;
+      //   let dateInput;
+      //
+      //   let time;
+      //
+      //   setup(function() {
+      //     element = fixture('ChangedMaxDateTestFixture');
+      //     elementShadowRoot = element.shadowRoot;
+      //
+      //     date = elementShadowRoot.querySelector('#date');
+      //     time = elementShadowRoot.querySelector('#time');
+      //   });
+      //
+      //   test('reset date to max date', function(done) {
+      //     Polymer.Base.async(function() {
+      //       date.focus();
+      //       date.value = '2019-09-09';
+      //       date.blur();
+      //
+      //       assert.equal(date.value, '2018-08-08');
+      //       done();
+      //     }, 1);
+      //   });
+      //
+      //   test('reset time to max date', function(done) {
+      //     Polymer.Base.async(function() {
+      //       date.focus();
+      //       date.value = '2018-08-08';
+      //       date.blur();
+      //
+      //       time.focus();
+      //       time.value = '10:10';
+      //       time.blur();
+      //
+      //       assert.equal(time.value, '08:08');
+      //       done();
+      //     }, 1);
+      //   });
+      // });
+
+      // suite('min-date', function() {
+      //   let element;
+      //   let elementShadowRoot;
+      //
+      //   let date;
+      //   let dateInput;
+      //
+      //   let time;
+      //   let timeInput;
+      //
+      //   setup(function() {
+      //     element = fixture('ChangedMinDateTestFixture');
+      //     elementShadowRoot = element.shadowRoot;
+      //
+      //     date = elementShadowRoot.querySelector('#date');
+      //     dateInput = date.$.input.shadowRoot.querySelector('input');
+      //
+      //     time = elementShadowRoot.querySelector('#time');
+      //     timeInput = time.shadowRoot.querySelector('input');
+      //   });
+      //
+      //   test('reset date to min date', function(done) {
+      //     Polymer.Base.async(function() {
+      //       dateInput.focus();
+      //       dateInput.value = '10.10.2010';
+      //       dateInput.blur();
+      //
+      //       assert.equal(date.value, '2011-01-01');
+      //       done();
+      //     }, 1);
+      //   });
+      //
+      //   // test('reset time to min date', function(done) {
+      //   //   Polymer.Base.async(function() {
+      //   //     date.focus();
+      //   //     date.value = '2011-01-01';
+      //   //     date.blur();
+      //   //
+      //   //     time.focus();
+      //   //     time.value = '00:11';
+      //   //     time.blur();
+      //   //
+      //   //     console.log(time.value, timeInput.value);
+      //   //
+      //   //     assert.equal(time.value, '01:01');
+      //   //     done();
+      //   //   }, 1);
+      //   // });
+      // });
     </script>
 
   </body>
