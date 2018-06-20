@@ -177,6 +177,10 @@
        * @return {Date} The calculated date.
        */
       _computeDateTime(date, time) {
+        if (this._noComputation) {
+          this._noComputation = false;
+          return;
+        }
         if (date && time) {
           const [hours, minutes] = time.split(':');
           const dateTime = Sugar.Date.create(date)
@@ -193,7 +197,9 @@
           this._noUpdate = false;
           return;
         }
+        this._noComputation = true;
         this.set("_date", Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
+        this._noComputation = true;
         this.set("_time", Sugar.Date.format(this.dateTime, '%H:%M'));
       }
 
