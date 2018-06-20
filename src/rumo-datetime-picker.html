@@ -182,8 +182,7 @@
           const dateTime = Sugar.Date.create(date)
             .addHours(hours)
             .addMinutes(minutes);
-
-          return dateTime;
+          this.set("dateTime", dateTime);
         }
       }
 
