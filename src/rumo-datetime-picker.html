@@ -182,12 +182,17 @@
           const dateTime = Sugar.Date.create(date)
             .addHours(hours)
             .addMinutes(minutes);
+          this._noUpdate = true;
           this.set("dateTime", dateTime);
         }
       }
 
       /* listen to changes of dateTime */
       _dateTimeUpdate(dateTime) {
+        if (this._noUpdate) {
+          this._noUpdate = false;
+          return;
+        }
         this.set("_date", Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
         this.set("_time", Sugar.Date.format(this.dateTime, '%H:%M'));
       }
