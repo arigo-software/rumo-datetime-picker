@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 
 <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html"> 
+<link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html">
 <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 
@@ -112,8 +112,9 @@
           /** The currently selected date and time as date object  */
           dateTime: {
             type: Object,
-            computed: '_computeDateTime(_date, _time)',
+            // computed: '_computeDateTime(_date, _time)',
             notify: true,
+            observer: '_dateTimeUpdate',
           },
           /** Label of the element */
           label: {
@@ -143,6 +144,13 @@
         super();
 
         Sugar.extend();
+      }
+
+      // (Complex) Observers
+      static get observers() {
+        return [
+          '_computeDateTime(_date, _time)'
+        ]
       }
 
       ready() {
@@ -177,6 +185,12 @@
 
           return dateTime;
         }
+      }
+
+      /* listen to changes of dateTime */
+      _dateTimeUpdate(dateTime) {
+        this.set("_date", Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
+        this.set("_time", Sugar.Date.format(this.dateTime, '%H:%M'));
       }
 
       /**
@@ -358,3 +372,4 @@
     window.customElements.define(RumoDatetimePicker.is, RumoDatetimePicker);
   </script>
 </dom-module>
+
