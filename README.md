@@ -15,7 +15,7 @@ First, make sure you have the
 [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run
 `npm start` to serve your element locally.
 
-## Viewing Element
+## Viewing the Element and the Documentation
 
 ```sh
 $ npm start
