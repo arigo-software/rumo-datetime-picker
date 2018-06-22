@@ -1,7 +1,7 @@
 {
   "name": "arigo-datetime-picker",
   "description": "Simple date-time-picker based on vaadin-components",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "engines": {
     "node": "8.x.x"
   },
