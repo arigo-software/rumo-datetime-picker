@@ -588,11 +588,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 82,
+              "line": 107,
               "column": 10
             },
             "end": {
-              "line": 85,
+              "line": 110,
               "column": 11
             }
           },
@@ -607,17 +607,18 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 87,
+              "line": 112,
               "column": 10
             },
             "end": {
-              "line": 90,
+              "line": 116,
               "column": 11
             }
           },
           "metadata": {
             "polymer": {
-              "readOnly": true
+              "notify": true,
+              "observer": "\"_dateTimeUpdate\""
             }
           }
         },
@@ -628,11 +629,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 92,
+              "line": 118,
               "column": 10
             },
             "end": {
-              "line": 96,
+              "line": 122,
               "column": 11
             }
           },
@@ -650,11 +651,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 98,
+              "line": 124,
               "column": 10
             },
             "end": {
-              "line": 102,
+              "line": 127,
               "column": 11
             }
           },
@@ -671,11 +672,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 104,
+              "line": 129,
               "column": 10
             },
             "end": {
-              "line": 108,
+              "line": 132,
               "column": 11
             }
           },
@@ -692,11 +693,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 110,
+              "line": 134,
               "column": 10
             },
             "end": {
-              "line": 113,
+              "line": 137,
               "column": 11
             }
           },
@@ -704,6 +705,46 @@
             "polymer": {}
           },
           "defaultValue": "\"00:00\""
+        },
+        {
+          "name": "_noComputation",
+          "type": "boolean",
+          "description": "suppresses the execution of the next call of _computeDateTime",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 139,
+              "column": 10
+            },
+            "end": {
+              "line": 142,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "_noUpdate",
+          "type": "boolean",
+          "description": "suppresses the execution of the next call of _dateTimeUpdate",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 144,
+              "column": 10
+            },
+            "end": {
+              "line": 147,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
         }
       ],
       "methods": [
@@ -953,11 +994,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 123,
+              "line": 163,
               "column": 6
             },
             "end": {
-              "line": 137,
+              "line": 177,
               "column": 7
             }
           },
@@ -2874,11 +2915,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 146,
+              "line": 186,
               "column": 6
             },
             "end": {
-              "line": 155,
+              "line": 199,
               "column": 7
             }
           },
@@ -2901,16 +2942,43 @@
           }
         },
         {
+          "name": "_dateTimeUpdate",
+          "description": "Calculates _date and _time from a change to dateTime from outside of the component\n(i.e. when dateTime is set in another way than via _computeDateTime).\nVia this method the displayed time is updated.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 210,
+              "column": 6
+            },
+            "end": {
+              "line": 218,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "dateTime",
+              "type": "Date",
+              "description": "The actual date and time."
+            }
+          ],
+          "return": {
+            "type": "String",
+            "desc": "time The time of dateTime in the form `00:00`."
+          }
+        },
+        {
           "name": "_labelChanged",
           "description": "Add or remove the `has-label` attribute on the element.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 162,
+              "line": 225,
               "column": 6
             },
             "end": {
-              "line": 168,
+              "line": 231,
               "column": 7
             }
           },
@@ -2929,11 +2997,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 177,
+              "line": 240,
               "column": 6
             },
             "end": {
-              "line": 199,
+              "line": 262,
               "column": 7
             }
           },
@@ -2962,11 +3030,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 207,
+              "line": 270,
               "column": 6
             },
             "end": {
-              "line": 252,
+              "line": 315,
               "column": 7
             }
           },
@@ -2990,11 +3058,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 260,
+              "line": 323,
               "column": 6
             },
             "end": {
-              "line": 262,
+              "line": 325,
               "column": 7
             }
           },
@@ -3018,11 +3086,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 270,
+              "line": 333,
               "column": 6
             },
             "end": {
-              "line": 272,
+              "line": 335,
               "column": 7
             }
           },
@@ -3046,11 +3114,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 275,
+              "line": 338,
               "column": 6
             },
             "end": {
-              "line": 283,
+              "line": 346,
               "column": 7
             }
           },
@@ -3059,15 +3127,15 @@
         },
         {
           "name": "_isDate",
-          "description": "Checck if the provided value is a date object.",
+          "description": "Check if the provided value is a date object.",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 291,
+              "line": 354,
               "column": 6
             },
             "end": {
-              "line": 293,
+              "line": 356,
               "column": 7
             }
           },
@@ -3090,11 +3158,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 300,
+              "line": 363,
               "column": 6
             },
             "end": {
-              "line": 330,
+              "line": 393,
               "column": 7
             }
           },
@@ -4050,11 +4118,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 75,
+          "line": 100,
           "column": 4
         },
         "end": {
-          "line": 331,
+          "line": 394,
           "column": 5
         }
       },
@@ -4067,11 +4135,11 @@
           "description": "The currently selected date and time as date object",
           "sourceRange": {
             "start": {
-              "line": 87,
+              "line": 112,
               "column": 10
             },
             "end": {
-              "line": 90,
+              "line": 116,
               "column": 11
             }
           },
@@ -4083,11 +4151,11 @@
           "description": "Label of the element",
           "sourceRange": {
             "start": {
-              "line": 92,
+              "line": 118,
               "column": 10
             },
             "end": {
-              "line": 96,
+              "line": 122,
               "column": 11
             }
           },
@@ -4099,11 +4167,11 @@
           "description": "Max selectable date and time in the form `0000-00-00 00:00`",
           "sourceRange": {
             "start": {
-              "line": 98,
+              "line": 124,
               "column": 10
             },
             "end": {
-              "line": 102,
+              "line": 127,
               "column": 11
             }
           },
@@ -4115,11 +4183,11 @@
           "description": "Min selectable date and time in the form `0000-00-00 00:00`",
           "sourceRange": {
             "start": {
-              "line": 104,
+              "line": 129,
               "column": 10
             },
             "end": {
-              "line": 108,
+              "line": 132,
               "column": 11
             }
           },
@@ -4127,7 +4195,14 @@
           "type": "string"
         }
       ],
-      "events": [],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "date-time-changed",
+          "description": "Fired when the `dateTime` property changes.",
+          "metadata": {}
+        }
+      ],
       "styling": {
         "cssVariables": [],
         "selectors": []

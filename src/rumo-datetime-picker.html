@@ -1,7 +1,7 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 
 <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
-<link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html"> 
+<link rel="import" href="../../vaadin-ordered-layout/vaadin-vertical-layout.html">
 <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
 <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 
@@ -112,7 +112,8 @@
           /** The currently selected date and time as date object  */
           dateTime: {
             type: Object,
-            computed: '_computeDateTime(_date, _time)',
+            notify: true,
+            observer: '_dateTimeUpdate',
           },
           /** Label of the element */
           label: {
@@ -135,6 +136,16 @@
             type: String,
             value: '00:00',
           },
+          /** suppresses the execution of the next call of _computeDateTime */
+          _noComputation: {
+            type: Boolean,
+            value: false,
+          },
+          /** suppresses the execution of the next call of _dateTimeUpdate */
+          _noUpdate: {
+            type: Boolean,
+            value: false,
+          },
         };
       }
 
@@ -142,6 +153,12 @@
         super();
 
         Sugar.extend();
+      }
+
+       static get observers() {
+        return [
+          '_computeDateTime(_date, _time)'
+        ]
       }
 
       ready() {
@@ -168,14 +185,37 @@
        * @return {Date} The calculated date.
        */
       _computeDateTime(date, time) {
+        if (this._noComputation) {
+          this.set("_noComputation", false);
+          return;
+        }
         if (date && time) {
           const [hours, minutes] = time.split(':');
           const dateTime = Sugar.Date.create(date)
             .addHours(hours)
             .addMinutes(minutes);
-
-          return dateTime;
+          this.set("_noUpdate", true);
+          this.set("dateTime", dateTime);
         }
+      }
+
+      /** 
+       * Calculates _date and _time from a change to dateTime from outside of the component
+       * (i.e. when dateTime is set in another way than via _computeDateTime).
+       * Via this method the displayed time is updated.
+       *
+       * @param {Date} dateTime The actual date and time.
+       * @return {String} date The date of dateTime in the form `0000-00-00`.
+       * @return {String} time The time of dateTime in the form `00:00`.
+       */
+      _dateTimeUpdate(dateTime) {
+        if (this._noUpdate) {
+          this.set("_noUpdate", false);
+          return;
+        }
+        this.set("_noComputation", true);
+        this.set("_date", Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
+        this.set("_time", Sugar.Date.format(this.dateTime, '%H:%M'));
       }
 
       /**
@@ -357,3 +397,4 @@
     window.customElements.define(RumoDatetimePicker.is, RumoDatetimePicker);
   </script>
 </dom-module>
+
