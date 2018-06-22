@@ -136,6 +136,16 @@
             type: String,
             value: '00:00',
           },
+          /** suppresses the execution of the next call of _computeDateTime */
+          _noComputation: {
+            type: Boolean,
+            value: false,
+          },
+          /** suppresses the execution of the next call of _dateTimeUpdate */
+          _noUpdate: {
+            type: Boolean,
+            value: false,
+          },
         };
       }
 
@@ -189,7 +199,15 @@
         }
       }
 
-      /* listen to changes of dateTime */
+      /** 
+       * Calculates _date and _time from a change to dateTime from outside of the component
+       * (i.e. when dateTime is set in another way than via _computeDateTime).
+       * Via this method the displayed time is updated.
+       *
+       * @param {Date} dateTime The actual date and time.
+       * @return {String} date The date of dateTime in the form `0000-00-00`.
+       * @return {String} time The time of dateTime in the form `00:00`.
+       */
       _dateTimeUpdate(dateTime) {
         if (this._noUpdate) {
           this.set("_noUpdate", false);
