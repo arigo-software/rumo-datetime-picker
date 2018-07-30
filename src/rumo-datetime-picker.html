@@ -102,6 +102,7 @@
       static get is() {
         return 'rumo-datetime-picker';
       }
+
       static get properties() {
         return {
           /** Value of the date field */
@@ -126,11 +127,13 @@
             type: String,
             observer: '_maxChanged',
           },
+          _maxDate: String,
           /** Min selectable date and time in the form `0000-00-00 00:00` */
           min: {
             type: String,
             observer: '_minChanged',
           },
+          _minDate: String,
           /** Value of the time field */
           _time: {
             type: String,
@@ -155,10 +158,8 @@
         Sugar.extend();
       }
 
-       static get observers() {
-        return [
-          '_computeDateTime(_date, _time)'
-        ]
+      static get observers() {
+        return ['_computeDateTime(_date, _time)'];
       }
 
       ready() {
@@ -182,40 +183,40 @@
        *
        * @param {String} date The selected date in the form `0000-00-00`.
        * @param {String} time The selected time in the form `00:00`.
-       * @return {Date} The calculated date.
        */
       _computeDateTime(date, time) {
         if (this._noComputation) {
-          this.set("_noComputation", false);
+          this.set('_noComputation', false);
           return;
         }
+
         if (date && time) {
           const [hours, minutes] = time.split(':');
           const dateTime = Sugar.Date.create(date)
             .addHours(hours)
             .addMinutes(minutes);
-          this.set("_noUpdate", true);
-          this.set("dateTime", dateTime);
+
+          this.set('_noUpdate', true);
+          this.set('dateTime', dateTime);
         }
       }
 
-      /** 
-       * Calculates _date and _time from a change to dateTime from outside of the component
-       * (i.e. when dateTime is set in another way than via _computeDateTime).
-       * Via this method the displayed time is updated.
+      /**
+       * Calculates _date and _time from a change to dateTime from outside of
+       * the component (i.e. when dateTime is set in another way than via
+       * _computeDateTime). Via this method the displayed time is updated.
        *
        * @param {Date} dateTime The actual date and time.
-       * @return {String} date The date of dateTime in the form `0000-00-00`.
-       * @return {String} time The time of dateTime in the form `00:00`.
        */
-      _dateTimeUpdate(dateTime) {
+      _dateTimeUpdate() {
         if (this._noUpdate) {
-          this.set("_noUpdate", false);
+          this.set('_noUpdate', false);
           return;
         }
-        this.set("_noComputation", true);
-        this.set("_date", Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
-        this.set("_time", Sugar.Date.format(this.dateTime, '%H:%M'));
+
+        this.set('_noComputation', true);
+        this.set('_date', Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
+        this.set('_time', Sugar.Date.format(this.dateTime, '%H:%M'));
       }
 
       /**
