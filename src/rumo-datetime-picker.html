@@ -38,6 +38,7 @@
 
       :host > vaadin-vertical-layout > label {
         display: none;
+        font-size: 13px;
       }
 
       :host([has-label]) > vaadin-vertical-layout > label {
@@ -52,6 +53,7 @@
           max="[[_maxDate]]"
           min="[[_minDate]]"
           value="{{_date}}"
+          on-change="_manualChangeDate"
           error-message="GETTEXT(Please enter a valid date)"></vaadin-date-picker>
       </div>
       <div class="block">
@@ -59,6 +61,7 @@
           id="time"
           value="{{_time}}"
           pattern="^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+          on-change="_manualChangeTime"
           error-message="GETTEXT(Please enter a valid time)">
           <iron-icon icon="vaadin:clock" slot="prefix"></iron-icon>
         </vaadin-text-field>
@@ -215,6 +218,22 @@
         this.set('_noComputation', true);
         this.set('_date', Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
         this.set('_time', Sugar.Date.format(this.dateTime, '%H:%M'));
+      }
+
+      /**
+       * fires an event when the date is changed manually
+       */
+      _manualChangeDate(evt) {
+        this._computeDateTime(evt.target.value, this._time);
+        this.dispatchEvent(new CustomEvent('change-date-time', {detail: {dateTime: this.dateTime}}));
+      }
+
+      /**
+       * fires an event when the time is changed manually
+       */
+      _manualChangeTime(evt) {
+        this._computeDateTime(this._date, evt.target.value);
+        this.dispatchEvent(new CustomEvent('change-date-time', {detail: {dateTime: this.dateTime}}));
       }
 
       /**
