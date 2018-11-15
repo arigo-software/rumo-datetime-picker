@@ -177,6 +177,21 @@
           this.$.date.addEventListener('blur', this._dateTimeChanged.bind(this));
           this.$.time.addEventListener('blur', this._dateTimeChanged.bind(this));
         }
+
+        this.$.time.addEventListener('blur', this.resetFocusToInput());
+      }
+
+      /*
+       * Ensures that a click on the time-input sets the focus to the input
+       * and not the the whole rumo-datetime-picker
+       * works for IE11, Edge and Chrome but not for Firefox
+      */
+      resetFocusToInput() {
+        return function(evt) {
+          if (evt.relatedTarget && evt.relatedTarget.$.time === this) {
+            this.focus();
+          }
+        }
       }
 
       /**
