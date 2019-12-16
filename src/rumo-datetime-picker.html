@@ -41,6 +41,10 @@
         font-size: 13px;
       }
 
+      :host .block.hide {
+        display: none;
+      }
+
       :host([has-label]) > vaadin-vertical-layout > label {
         display: block;
       }
@@ -57,7 +61,7 @@
           on-change="_manualChangeDate"
           error-message="GETTEXT(Please enter a valid date)"></vaadin-date-picker>
       </div>
-      <div class="block">
+      <div class$="block [[_calcHide(hideTime)]]">
         <vaadin-text-field
           disabled="[[disable]]"
           id="time"
@@ -154,6 +158,9 @@
           },
           disable: {
             type: Boolean
+          },
+          hideTime: {
+            type: Boolean
           }
         };
       }
@@ -184,6 +191,10 @@
         }
 
         this.$.time.addEventListener('blur', this.resetFocusToInput(this.$.time));
+      }
+
+      _calcHide(hideTime) {
+        if (hideTime) return "hide";
       }
 
       /*
