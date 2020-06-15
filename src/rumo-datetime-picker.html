@@ -48,11 +48,27 @@
       :host([has-label]) > vaadin-vertical-layout > label {
         display: block;
       }
+
+      /* :host vaadin-vertical-layout.changed {
+        --lumo-font-family: sans-serif !important;
+      } */
+      :host vaadin-date-picker.changed {
+        --lumo-contrast-10pct: lightgray;
+        --lumo-border-radius: 20px;
+      }
+      :host vaadin-text-field.changed {
+        --lumo-contrast-10pct: lightgray;
+        --lumo-border-radius: 20px;
+      }
+      /* :host.title[changed-layout="true"] {
+        font-variant-caps: normal;
+      } */
     </style>
-    <vaadin-vertical-layout theme="padding">
+    <vaadin-vertical-layout class$="[[_isChanged(changedLayout)]]" theme="padding">
       <label class="block">[[label]]</label>
       <div class="block">
         <vaadin-date-picker
+          class$="[[_isChanged(changedLayout)]]"
           disabled="[[disable]]"
           id="date"
           max="[[_maxDate]]"
@@ -63,6 +79,7 @@
       </div>
       <div class$="block [[_calcHide(hideTime)]]">
         <vaadin-text-field
+          class$="[[_isChanged(changedLayout)]]"
           disabled="[[disable]]"
           id="time"
           value="{{_time}}"
@@ -161,6 +178,10 @@
           },
           hideTime: {
             type: Boolean
+          },
+          changedLayout: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -195,6 +216,10 @@
 
       _calcHide(hideTime) {
         if (hideTime) return "hide";
+      }
+
+      _isChanged(changedLayout) {
+        if (changedLayout) return "changed";
       }
 
       /*
