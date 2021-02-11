@@ -294,7 +294,7 @@
       }
 
       _manualChangeYear(evt) {
-        this._computeDateTime(new Date(evt.target.value, 0), this._time);
+        this._computeDateTime(this.dateTime.setYear(evt.target.value), this._time);
         this.dispatchEvent(new CustomEvent('change-date-time', {detail: {dateTime: this.dateTime}}));
       }
 
