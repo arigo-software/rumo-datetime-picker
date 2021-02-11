@@ -66,7 +66,7 @@
     </style>
     <vaadin-vertical-layout class$="[[_isChanged(changedLayout)]]" theme="padding">
       <label class="block">[[label]]</label>
-      <div class="block">
+      <div class$="block [[_calcDateHide(onlyYears)]]">
         <vaadin-date-picker
           class$="[[_isChanged(changedLayout)]]"
           disabled="[[disable]]"
@@ -77,7 +77,7 @@
           on-change="_manualChangeDate"
           error-message="GETTEXT(Please enter a valid date)"></vaadin-date-picker>
       </div>
-      <div class$="block [[_calcHide(hideTime)]]">
+      <div class$="block [[_calcTimeHide(hideTime, onlyYears)]]">
         <vaadin-text-field
           class$="[[_isChanged(changedLayout)]]"
           disabled="[[disable]]"
@@ -87,6 +87,17 @@
           on-change="_manualChangeTime"
           error-message="GETTEXT(Please enter a valid time)">
           <iron-icon icon="vaadin:clock" slot="prefix"></iron-icon>
+        </vaadin-text-field>
+      </div>
+      <div class$="block [[_calcYearHide(onlyYears)]]">
+        <vaadin-text-field
+          disabled="[[disable]]"
+          id="time"
+          pattern="^(2[0-9][0-9][0-9])$"
+          value="{{_year}}"
+          on-change="_manualChangeYear"
+          error-message="GETTEXT(Please enter a valid time)">
+          <iron-icon icon="vaadin:calendar-o" slot="prefix"></iron-icon>
         </vaadin-text-field>
       </div>
     </vaadin-vertical-layout>
@@ -182,6 +193,12 @@
           changedLayout: {
             type: Boolean,
             value: false
+          },
+          onlyYears: {
+            type: Boolean
+          },
+          _year: {
+            type: Number
           }
         };
       }
@@ -214,14 +231,21 @@
         this.$.time.addEventListener('blur', this.resetFocusToInput(this.$.time));
       }
 
-      _calcHide(hideTime) {
-        if (hideTime) return "hide";
+      _calcDateHide(onlyYears) {
+        if (onlyYears === true) return "hide";
+      }
+
+      _calcYearHide(onlyYears) {
+        if (onlyYears !== true) return "hide";
+      }
+
+      _calcTimeHide(hideTime, onlyYears) {
+        if (hideTime || onlyYears === true) return "hide";
       }
 
       _isChanged(changedLayout) {
         if (changedLayout) return "changed";
       }
-
       /*
        * Ensures that a click on the time-input sets the focus to the input
        * and not the the whole rumo-datetime-picker
@@ -274,6 +298,7 @@
         this.set('_noComputation', true);
         this.set('_date', Sugar.Date.format(this.dateTime, '%Y-%m-%d'));
         this.set('_time', Sugar.Date.format(this.dateTime, '%H:%M'));
+        this.set('_year', this.dateTime.getFullYear());
       }
 
       /**
@@ -289,6 +314,11 @@
        */
       _manualChangeTime(evt) {
         this._computeDateTime(this._date, evt.target.value);
+        this.dispatchEvent(new CustomEvent('change-date-time', {detail: {dateTime: this.dateTime}}));
+      }
+
+      _manualChangeYear(evt) {
+        this._computeDateTime(this.dateTime.setYear(evt.target.value), this._time);
         this.dispatchEvent(new CustomEvent('change-date-time', {detail: {dateTime: this.dateTime}}));
       }
 
